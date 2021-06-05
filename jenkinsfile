@@ -7,9 +7,14 @@ pipeline {
         COMPONENT = "workstation"
     }
 
+    parameters {
+    choice(name: 'Workstation', choices: ['Build & Push Image', 'Create POD'], description: 'Pick any action')
+               }
+
     stages {
         
         stage ('Build DKIM workstation') {
+            when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 sh '''
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
@@ -19,6 +24,7 @@ pipeline {
                 }
         stage ('Push DKIM workstation') {
             steps {
+                when {expression {params.Workstation == 'Build & Push Image'}}
                 sh "docker login -u $DOCKERHUB_USR -p $DOCKERHUB_PSW"
                 sh '''
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
@@ -28,6 +34,12 @@ pipeline {
                 sh 'docker rmi -f $(docker images -q)'
                 }
               }
+        stage ('Create POD') {
+            when {expression {params.Workstation == 'Create POD'}}
+            steps {
+                sh "kubectl apply -f pod.yml"
+            }
+        }
             }
     post {
         always { 
