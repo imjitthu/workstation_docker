@@ -23,8 +23,8 @@ pipeline {
                 }
                 }
         stage ('Push DKIM workstation') {
+            when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                when {expression {params.Workstation == 'Build & Push Image'}}
                 sh "docker login -u $DOCKERHUB_USR -p $DOCKERHUB_PSW"
                 sh '''
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 sh "kubectl apply -f pod.yml"
             }
-        }
+            }
             }
     post {
         always { 
