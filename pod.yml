@@ -22,20 +22,3 @@ spec:
           image: jithendar/workstation:10.5
           ports:
             - containerPort: 8080
-          env:
-            - name: MONGO_URL
-              value: "mongodb://mongodb:27017/workstation"
-            - name: REDIS_HOST
-              value: redis-master
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: workstation
-spec:
-  selector:
-    app: workstation
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
