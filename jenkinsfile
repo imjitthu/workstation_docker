@@ -10,9 +10,6 @@ pipeline {
     stages {
         
         stage ('Build DKIM workstation') {
-            when {
-                triggeredBy 'github'
-                 }
             steps {
                 sh '''
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
@@ -21,9 +18,6 @@ pipeline {
                 }
                 }
         stage ('Push DKIM workstation') {
-            when {
-                triggeredBy 'github'
-                 }
             steps {
                 sh "docker login -u $DOCKERHUB_USR -p $DOCKERHUB_PSW"
                 sh '''
@@ -34,17 +28,6 @@ pipeline {
                 sh 'docker rmi -f $(docker images -q)'
                 }
               }
-        stage ('Create POD with KubeCTL') {
-            when {
-                triggeredBy 'workstation'
-                 }
-            steps {
-                sh '''
-                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
-                kubectl apply -f pod.yml
-                '''
-                }
-                }
             }
     post {
         always { 
