@@ -36,7 +36,7 @@ pipeline {
         stage ('Create POD') {
             when {expression {params.Workstation == 'Create POD'}}
             steps {
-                sh "kubectl run workstation --image=centos:7 sleep 10000"
+                sh "kubectl run workstation --image=jithendar/workstation:2.0 sleep 10000"
             }
             }
             }
