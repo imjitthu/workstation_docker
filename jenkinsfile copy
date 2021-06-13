@@ -17,18 +17,18 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 sh '''
-                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 463188042469.dkr.ecr.us-east-1.amazonaws.com
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
-                docker build -t jithendar:$tag .
+                docker build -t ${DOCKERURL}/${DOCKERUSR}/${COMPONENT}:$tag .
                 '''
                 }
                 }
         stage ('Push DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
+                sh "docker login -u $DOCKERHUB_USR -p $DOCKERHUB_PSW"
                 sh '''
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
-                docker push 463188042469.dkr.ecr.us-east-1.amazonaws.com/jithendar:$tag
+                docker push ${DOCKERURL}/${DOCKERUSR}/${COMPONENT}:$tag
                 '''
                 sh 'docker logout'
                 }
