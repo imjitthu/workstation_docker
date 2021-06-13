@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+        registry = "463188042469.dkr.ecr.us-east-1.amazonaws.com/jithendar"
         DOCKERHUB = credentials('dockerhub')
         DOCKERURL = "docker.io"
         DOCKERUSR = "jithendar"
@@ -16,20 +17,22 @@ pipeline {
         stage ('Build DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                sh '''
-                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
-                docker build -t ${COMPONENT}:$tag .
-                '''
+                script {
+                dockerImage = docker.build registry
+                }
+                // sh '''
+                // tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
+                // docker build -t ${DOCKERURL}/${DOCKERUSR}/${COMPONENT}:$tag .
+                // '''
                 }
                 }
         stage ('Push DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
+                sh "docker login -u $DOCKERHUB_USR -p $DOCKERHUB_PSW"
                 sh '''
-                DockerPass=$(aws ecr get-login-password --region us-east-1)
-                docker login -u AWS -p $DockerPass 463188042469.dkr.ecr.us-east-1.amazonaws.com
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
-                docker push 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:$tag
+                docker push ${DOCKERURL}/${DOCKERUSR}/${COMPONENT}:$tag
                 '''
                 sh 'docker logout'
                 }
