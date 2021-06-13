@@ -17,7 +17,7 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 sh '''
-                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
+                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
                 docker build -t ${COMPONENT}:$tag .
                 '''
                 }
@@ -28,7 +28,7 @@ pipeline {
                 sh '''
                 DockerPass=$(aws ecr get-login-password --region us-east-1)
                 docker login -u AWS -p $DockerPass 463188042469.dkr.ecr.us-east-1.amazonaws.com
-                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
+                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
                 docker tag workstation:$tag 463188042469.dkr.ecr.us-east-1.amazonaws.com/workstation:$tag
                 docker push 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:$tag
                 '''
