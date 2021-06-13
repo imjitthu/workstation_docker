@@ -29,7 +29,7 @@ pipeline {
                 DockerPass=$(aws ecr get-login-password --region us-east-1)
                 docker login -u AWS -p $DockerPass 463188042469.dkr.ecr.us-east-1.amazonaws.com
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k2 | tail -n 1 | awk '{print $4}')
-                docker push 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:2.0
+                docker push 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:$tag
                 '''
                 sh 'docker logout'
                 }
