@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         DOCKERHUB = credentials('dockerhub')
-        DOCKERURL = "docker.io"
-        DOCKERUSR = "jithendar"
+        ECRURL = "463188042469.dkr.ecr.us-east-1.amazonaws.com"
+        ECRRUSR = "AWS"
         COMPONENT = "workstation"
     }
 
@@ -27,10 +27,10 @@ pipeline {
             steps {
                 sh '''
                 DockerPass=$(aws ecr get-login-password --region us-east-1)
-                docker login -u AWS -p $DockerPass 463188042469.dkr.ecr.us-east-1.amazonaws.com
+                docker login -u AWS -p $DockerPass ${ECRURL}
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
-                docker tag ${COMPONENT}:$tag 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:$tag
-                docker push 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:$tag
+                docker tag ${COMPONENT}:$tag ${ECRURL}/${COMPONENT}:$tag
+                docker push ${ECRURL}/${COMPONENT}:$tag
                 '''
                 sh 'docker logout'
                 }
@@ -38,7 +38,7 @@ pipeline {
         stage ('Create POD') {
             when {expression {params.Workstation == 'Create POD'}}
             steps {
-                sh "kubectl run workstation --image=463188042469.dkr.ecr.us-east-1.amazonaws.com/workstation:3.0 sleep 10000"
+                sh "kubectl run workstation --image=${ECRURL}/${COMPONENT}:3.0 sleep 10000"
             }
             }
             }
