@@ -29,7 +29,7 @@ pipeline {
                 DockerPass=$(aws ecr get-login-password --region us-east-1)
                 docker login -u AWS -p $DockerPass 463188042469.dkr.ecr.us-east-1.amazonaws.com
                 tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
-                docker tag workstation:$tag 463188042469.dkr.ecr.us-east-1.amazonaws.com/workstation:$tag
+                docker tag ${COMPONENT}:$tag 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:$tag
                 docker push 463188042469.dkr.ecr.us-east-1.amazonaws.com/${COMPONENT}:$tag
                 '''
                 sh 'docker logout'
@@ -38,7 +38,7 @@ pipeline {
         stage ('Create POD') {
             when {expression {params.Workstation == 'Create POD'}}
             steps {
-                sh "kubectl run workstation --image=jithendar/workstation:2.0 sleep 10000"
+                sh "kubectl run workstation --image=463188042469.dkr.ecr.us-east-1.amazonaws.com/workstation:3.0 sleep 10000"
             }
             }
             }
