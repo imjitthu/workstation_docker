@@ -43,7 +43,7 @@ pipeline {
                 // kubectl run workstation --image=${ECRURL}/${COMPONENT}:$tag sleep 10000
                 // '''
                 script {
-                kubernetesDeploy(configs: "pod.yaml", kubeconfigId: "kubeconfig")
+                kubernetesDeploy(configs: "pod.yaml", kubeconfigId: "kubeconfig_deploy")
                 }
             }
             }
