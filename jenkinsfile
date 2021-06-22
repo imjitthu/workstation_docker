@@ -38,10 +38,13 @@ pipeline {
         stage ('Create POD') {
             when {expression {params.Workstation == 'Create POD'}}
             steps {
-                sh '''
-                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
-                kubectl run workstation --image=${ECRURL}/${COMPONENT}:$tag sleep 10000
-                '''
+                // sh '''
+                // tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
+                // kubectl run workstation --image=${ECRURL}/${COMPONENT}:$tag sleep 10000
+                // '''
+                script {
+                kubernetesDeploy(configs: "myweb.yaml", kubeconfigId: "mykubeconfig")
+                }
             }
             }
             }
