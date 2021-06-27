@@ -15,7 +15,7 @@ pipeline {
         stage ('Build DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                scritp {
+                script {
                     dockerImage = docker.build "${COMPONENT}:${TAG}"
                 }
                 }
