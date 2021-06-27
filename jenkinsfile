@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        CREDENTIALS = 'nexus'
+        CREDENTIALS = "nexus"
         NEXUSURL = "lab.jithendar.com:8081"
         COMPONENT = "workstation"
         TAG = "10.0"
