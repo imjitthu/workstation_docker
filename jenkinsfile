@@ -4,7 +4,7 @@ pipeline {
         NEXUSHUB = credentials('nexus')
         NEXUSURL = "lab.jithendar.com:8085"
         COMPONENT = "workstation"
-        TAG = "10.0"
+        TAG = "10.1"
         }
 
     parameters {
