@@ -1,34 +1,28 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB = credentials('dockerhub')
-        ECRURL = "463188042469.dkr.ecr.us-east-1.amazonaws.com"
-        ECRRUSR = "AWS"
+        NEXUSHUB = credentials('nexus')
+        NEXUSURL = "lab.jithendar.com:8080"
         COMPONENT = "workstation"
+        TAG = "10.0"
     }
 
     parameters {
     choice(name: 'Workstation', choices: ['Build & Push Image', 'Create POD'], description: 'Pick any action')
                }
-
     stages {
         
         stage ('Build DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                sh "docker build -t ${COMPONENT}:10.0 ."
+                sh "docker build -t ${COMPONENT}:${TAG} ."
                 }
                 }
         stage ('Push DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                sh '''
-                DockerPass=$(aws ecr get-login-password --region us-east-1)
-                docker login -u AWS -p $DockerPass ${ECRURL}
-                docker tag ${COMPONENT}:$tag ${ECRURL}/${COMPONENT}:$tag
-                docker push ${ECRURL}/${COMPONENT}:$tag
-                '''
-                sh 'docker logout'
+                //sh "docker login -u $NEXUSHUB_USR -p $NEXUSHUB_PSW"
+                sh "docker push ${NEXUSURL}/${COMPONENT}:${TAG}"
                 }
               }
         stage ('Create POD') {
