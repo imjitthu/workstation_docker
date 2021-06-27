@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        NEXUSHUB = credentials('nexus')
+        CREDENTIALS = 'nexus'
         NEXUSURL = "lab.jithendar.com:8081"
         COMPONENT = "workstation"
         TAG = "10.0"
@@ -15,14 +15,19 @@ pipeline {
         stage ('Build DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                sh "docker build -t ${NEXUSURL}/${COMPONENT}:${TAG} ."
+                scritp {
+                    dockerImage = docker.build "${COMPONENT}:${TAG}"
+                }
                 }
                 }
         stage ('Push DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                //sh "docker login -u $NEXUSHUB_USR -p $NEXUSHUB_PSW ${NEXUSURL}"
-                sh "docker push ${NEXUSURL}/${COMPONENT}:${TAG}"
+                script {
+                    docker.withRegistry('http://', CREDENTIALS) {
+                        dockerImage.push ("${TAG}")
+                    }
+                }
                 }
               }
         stage ('Create POD') {
