@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         imageName = "workstation"
-        registryCredentials = "nexus"
-        registry = "lab.jithendar.com:8085"
+        NEXUSHUB = "nexus"
+        NEXUSURL = "lab.jithendar.com:8085"
         dockerImage = ''
         COMPONENT = "workstation"
         TAG = "10.0"
@@ -25,12 +25,7 @@ pipeline {
         stage ('Push Docker Image') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                script {
-                    withDockerRegistry(credentialsId: 'nexus', toolName: 'docker', url: 'lab.jithendar.com:8085') {
-                    dockerImage = docker.push "${registry}/${COMPONENT}:${TAG}"
-                    }
-                    // docker.withRegistry('http://'+registry, registryCredentials) {
-                    // }
+                sh "docker login -u $NEXUSHUB_USR -p $NEXUSHUB_PSW ${NEXUSURL}"
                 }
                 }
               }
