@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         NEXUSHUB = credentials('nexus')
-        NEXUSURL = "lab.jithendar.com:8081"
+        NEXUSURL = "lab.jithendar.com:18444"
         COMPONENT = "workstation"
         TAG = "10.0"
     }
