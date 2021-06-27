@@ -3,7 +3,7 @@ pipeline {
     environment {
         imageName = "workstation"
         registryCredentials = "nexus"
-        registry = "lab.jithendar.com:8085/"
+        registry = "lab.jithendar.com:8085"
         dockerImage = ''
         COMPONENT = "workstation"
         TAG = "10.0"
@@ -18,7 +18,7 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 script {
-                    dockerImage = docker.build "${registry}${COMPONENT}:${TAG}"
+                    dockerImage = docker.build "${registry}/${COMPONENT}:${TAG}"
                 }
                 }
                 }
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'nexus', toolName: 'docker', url: 'lab.jithendar.com:8085') {
-                    docker.push "${COMPONENT}:${TAG}"
+                    docker.push "${registry}/${COMPONENT}:${TAG}"
                     }
                     docker.withRegistry('http://'+registry, registryCredentials) {
                     }
