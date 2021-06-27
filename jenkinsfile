@@ -1,8 +1,10 @@
 pipeline {
     agent any
     environment {
+        imageName = "workstation"
         registryCredentials = "nexus"
-        registry = "lab.jithendar.com:8081"
+        registry = "lab.jithendar.com:8085"
+        dockerImage = ''
         COMPONENT = "workstation"
         TAG = "10.0"
     }
@@ -12,7 +14,7 @@ pipeline {
                }
     stages {
         
-        stage ('Build DKIM workstation') {
+        stage ('Build Docker Image') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 script {
@@ -20,7 +22,7 @@ pipeline {
                 }
                 }
                 }
-        stage ('Push DKIM workstation') {
+        stage ('Push Docker Image') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 script {
