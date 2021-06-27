@@ -15,7 +15,7 @@ pipeline {
         stage ('Build DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                sh "docker build -t ${COMPONENT}:${TAG} ."
+                sh "docker build -t ${NEXUSURL}/${COMPONENT}:${TAG} ."
                 }
                 }
         stage ('Push DKIM workstation') {
