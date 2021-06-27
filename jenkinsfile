@@ -16,9 +16,7 @@ pipeline {
         stage ('Build DKIM workstation') {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
-                sh '''
-                docker build -t ${COMPONENT}:10.0 .
-                '''
+                sh "docker build -t ${COMPONENT}:10.0 ."
                 }
                 }
         stage ('Push DKIM workstation') {
@@ -27,7 +25,6 @@ pipeline {
                 sh '''
                 DockerPass=$(aws ecr get-login-password --region us-east-1)
                 docker login -u AWS -p $DockerPass ${ECRURL}
-                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
                 docker tag ${COMPONENT}:$tag ${ECRURL}/${COMPONENT}:$tag
                 docker push ${ECRURL}/${COMPONENT}:$tag
                 '''
