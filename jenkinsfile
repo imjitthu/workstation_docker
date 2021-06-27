@@ -27,7 +27,6 @@ pipeline {
                 sh "docker push ${NEXUSURL}/${COMPONENT}:${TAG}"
                 }
                 }
-                }
         stage ('Create POD') {
             when {expression {params.Workstation == 'Create POD'}}
             steps {
@@ -36,10 +35,10 @@ pipeline {
                 }
             }
             }
-            }
     post {
         always { 
             cleanWs()
+            }
         }
-     }
+    }
 }
