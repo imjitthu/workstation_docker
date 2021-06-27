@@ -5,11 +5,12 @@ pipeline {
         NEXUSURL = "lab.jithendar.com:8085"
         COMPONENT = "workstation"
         TAG = "10.0"
-    }
+        }
 
     parameters {
     choice(name: 'Workstation', choices: ['Build & Push Image', 'Create POD'], description: 'Pick any action')
                }
+    
     stages {
         
         stage ('Build Docker Image') {
@@ -36,9 +37,9 @@ pipeline {
             }
             }
         }
-    post {
-        always { 
-            cleanWs()
-        }
-    }
+    // post {
+    //     always { 
+    //         cleanWs()
+    //     }
+    // }
 }
