@@ -18,7 +18,7 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 script {
-                    dockerImage = docker.build "${COMPONENT}:${TAG}"
+                    dockerImage = docker.build "${registry}/${COMPONENT}:${TAG}"
                 }
                 }
                 }
