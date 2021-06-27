@@ -26,9 +26,10 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 script {
+                    withDockerRegistry(credentialsId: 'nexus', toolName: 'docker', url: 'lab.jithendar.com:8085') {
+                    dockerImage.push "${COMPONENT}:${TAG}"
+                    }
                     docker.withRegistry('http://'+registry, registryCredentials) {
-                        dockerImage.push
-                        //("${TAG}")
                     }
                 }
                 }
