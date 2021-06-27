@@ -29,8 +29,8 @@ pipeline {
                     withDockerRegistry(credentialsId: 'nexus', toolName: 'docker', url: 'lab.jithendar.com:8085') {
                     dockerImage = docker.push "${registry}/${COMPONENT}:${TAG}"
                     }
-                    docker.withRegistry('http://'+registry, registryCredentials) {
-                    }
+                    // docker.withRegistry('http://'+registry, registryCredentials) {
+                    // }
                 }
                 }
               }
