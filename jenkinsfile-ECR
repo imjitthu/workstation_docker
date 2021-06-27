@@ -17,7 +17,8 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 sh '''
-                docker build -t ${COMPONENT}:10.0 .
+                tag=$(git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort -k1 | sort -k1 | tail -n 1 | awk '{print $4}')
+                docker build -t ${COMPONENT}:$tag .
                 '''
                 }
                 }
