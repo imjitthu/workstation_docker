@@ -26,9 +26,10 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 sh "docker login -u $NEXUSHUB_USR -p $NEXUSHUB_PSW ${NEXUSURL}"
+                sh "docker push ${registry}/${COMPONENT}:${TAG}"
                 }
                 }
-              }
+                }
         stage ('Create POD') {
             when {expression {params.Workstation == 'Create POD'}}
             steps {
