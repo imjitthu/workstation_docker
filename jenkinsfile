@@ -16,7 +16,7 @@ pipeline {
             when {expression {params.Workstation == 'Build & Push Image'}}
             steps {
                 script {
-                    unzip zipFile: 'example.zip', quiet: true
+                    unzip zipFile: 'shipping.zip', quiet: true
                     dockerImage = docker.build "${NEXUSURL}/${COMPONENT}:${TAG}"
                 }
                 }
