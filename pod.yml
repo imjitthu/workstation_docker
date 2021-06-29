@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: workstation
-          image: jithendar/workstation:1.0
+          image: lab_image
           ports:
             - containerPort: 8080
           resources:
