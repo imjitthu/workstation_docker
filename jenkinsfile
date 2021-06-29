@@ -34,13 +34,10 @@ pipeline {
                 script {
                 contentReplace(configs: [
                 fileContentReplaceConfig(configs: [
-                fileContentReplaceItemConfig(matchCount: 
-                0, 
-                replace: "${NEXUSURL}/${COMPONENT}:${TAG}", 
-                search: 'lab_image')], 
+                fileContentReplaceItemConfig
+                (matchCount: 0, replace: "${NEXUSURL}/${COMPONENT}:${TAG}", search: 'lab_image')], 
                 fileEncoding: 'UTF-8', filePath: 'pod.yml')])
-                sh "cat pod.yml"
-                //kubernetesDeploy(configs: "pod.yml", kubeconfigId: "kubeconfig_deploy")
+                kubernetesDeploy(configs: "pod.yml", kubeconfigId: "kubeconfig_deploy")
                 }
             }
             }
