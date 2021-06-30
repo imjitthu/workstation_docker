@@ -32,11 +32,13 @@ pipeline {
             when {expression {params.Workstation == 'Create POD'}}
             steps {
                 script {
+                //modifying Image with tag in POD.YML file
                 contentReplace(configs: [
                 fileContentReplaceConfig(configs: [
                 fileContentReplaceItemConfig
                 (matchCount: 0, replace: "${NEXUSURL}/${COMPONENT}:${TAG}", search: 'lab_image')], 
                 fileEncoding: 'UTF-8', filePath: 'pod.yml')])
+                //Kubernetes Deploy
                 kubernetesDeploy(configs: "pod.yml", kubeconfigId: "kubeconfig_deploy")
                 }
             }
