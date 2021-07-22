@@ -4,7 +4,7 @@ WORKDIR   /tmp
 COPY      catalogue.js .
 COPY      users.js .
 COPY      shipping.zip .
-RUN       yum install unzip
+RUN       yum install unzip -y
 RUN       unzip shipping.zip      
 RUN       yum install mysql -y
 RUN       yum install -y mongodb-org
