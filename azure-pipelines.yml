@@ -6,13 +6,18 @@ trigger:
 pool:
   default
 
-steps: 
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'Docker_Registry'
-      repository: 'jithendar/workstation'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
-      tags: '$(Build.BuildId)'
+steps:
+- script: |
+    docker login -u jithendar -p DevOps321
+  displayName: 'Docker Login'
+
+# steps: 
+#   - task: Docker@2
+#     inputs:
+#       containerRegistry: 'Docker_Registry'
+#       repository: 'jithendar/workstation'
+#       command: 'buildAndPush'
+#       Dockerfile: '**/Dockerfile'
+#       tags: '$(Build.BuildId)'
 
 #Buil and Push WorkStation Docker Image to Docker_HUB
