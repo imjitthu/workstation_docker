@@ -1,9 +1,8 @@
-# trigger:
-#   branches:
-#     include: [ "*" ] 
-#   tags:
-#     include: [ "*" ]
-
+trigger:
+  branches:
+    include: [ "*" ] 
+  tags:
+    include: [ "*" ]
 pool:
   vmImage: 'ubuntu-latest'
 
