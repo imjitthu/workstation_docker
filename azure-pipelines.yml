@@ -8,6 +8,7 @@ pool:
 
 steps:
 - script: |
+    id
     docker login -u jithendar -p DevOps321
   displayName: 'Docker Login'
 
