@@ -9,7 +9,7 @@ pool:
 # steps:
 # - script: |
 #     id
-#     docker login -u jithendar -p DevOps321
+#     docker login -u jithendar -p $PassWord
 #   displayName: 'Docker Login'
 
 steps: 
