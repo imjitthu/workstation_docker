@@ -2,7 +2,7 @@
 # - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'centos'
 
 steps: 
   - task: Docker@2
