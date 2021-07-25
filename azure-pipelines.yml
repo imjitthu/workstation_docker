@@ -4,7 +4,7 @@ trigger:
   tags:
     include: [ "*" ]
 pool:
-  Private: 'default'
+  Private: 'centos'
 
 steps: 
   - task: Docker@2
